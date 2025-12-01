@@ -6,11 +6,19 @@
 set -e  # Exit on any error
 
 # Color codes for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+if [[ -t 1 ]]; then
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m' # No Color
+else
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    NC=''
+fi
 
 # Function to print colored output
 print_status() {
@@ -143,11 +151,7 @@ main() {
 
     # Determine output directory
     if [[ -z "$output_dir" ]]; then
-        # Get base directory and filename of input file
-        local input_dir="$(dirname "$input_file")"
-        local input_basename="$(basename "$input_file" .${extension})"
-        local sanitized_basename=$(sanitize_filename "$input_basename")
-        output_dir="${input_dir}/${sanitized_basename}"
+        output_dir="$(dirname "$input_file")/clips/"
     fi
 
     # Create output directory if it doesn't exist
